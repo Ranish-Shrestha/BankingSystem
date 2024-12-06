@@ -11,6 +11,6 @@
     <p style="color: red;">
         <%= request.getAttribute("errorMessage") %>
     </p>
-    <a href="createAccount.jsp">Back to Create Account</a>
+    <a href="index.jsp">Back to Create Account</a>
 </body>
 </html>

@@ -27,9 +27,6 @@
 						<a class="nav-link" aria-current="page" href="index.jsp">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="balance.jsp">Check Balance</a>
-					</li>
-					<li class="nav-item">
 						<a class="nav-link active" href="deposit.jsp">Deposit Money</a>
 					</li>
 					<li class="nav-item">
@@ -50,5 +47,48 @@
 		</div>
 	</nav>
 
+    <div class="container">
+        <h1>Deposit Money</h1>
+        <form id="depositForm">
+            <div class="form-group">
+                <label for="account_id">Account ID:</label>
+                <input type="text" id="account_id" name="account_id" placeholder="Account ID" required />
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" placeholder="Amount" required />
+            </div>
+            <button type="submit">Deposit</button>
+        </form>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        document.getElementById('depositForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(document.getElementById('depositForm'));
+
+            try {
+                const response = await fetch("account?action=deposit", {
+                    method: 'POST',
+                    body: new URLSearchParams(formData)
+                });
+
+                let data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('result').innerText = 'Deposit successful';
+                    console.log(data);
+                } else {
+                    document.getElementById('result').innerText = 'Deposit failed: ' + data.error;
+                    console.log(data);
+                }
+            } catch (error) {
+                document.getElementById('result').innerText = 'Error: ' + error.message;
+                console.error('Error:', error);
+            }
+        });
+    </script>
 </body>
 </html>

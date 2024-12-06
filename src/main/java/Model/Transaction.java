@@ -1,7 +1,7 @@
 package Model;
 
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 public class Transaction {
     private int transactionId;
@@ -47,7 +47,15 @@ public class Transaction {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	
+	public Transaction(int transactionId, String transactionType, BigDecimal amount, Timestamp timestamp,
+			String description) {
+		this.transactionId = transactionId;
+		this.transactionType = transactionType;
+		this.amount = amount;
+		this.timestamp = timestamp;
+		this.description = description;
+	}
     
 }
 

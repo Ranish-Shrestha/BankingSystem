@@ -2,7 +2,6 @@ package Servlets;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,29 +29,25 @@ public class AccountServlet extends HttpServlet {
 		BankSystemDAO dao = new BankSystemDAO();
 
 		switch (action) {
-
-		case "balance":
-			dao.displayBalance(request, response);
-			break; 
 			
 		case "logout":
-			Cookie[] cookies = request.getCookies(); 
-			if (cookies != null) { 
-				for (Cookie cookie : cookies) { 
-					if ("username".equals(cookie.getName())) { 
-						cookie.setMaxAge(0); // Delete the cookie 
-						response.addCookie(cookie); 
-						} 
-					} 
-				} 
+			dao.deleteAllCookies(request, response);
 			response.sendRedirect("login.jsp");	
 			break;
+		
+		case "checkBalance":
+            dao.checkBalance(request, response);
+            break;
+            
+		case "getTransactions":
+			dao.getTransactions(request, response);
+            break;
 
 		default:
 			throw new ServletException("Unknown action: " + action);
 		}
 	}
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
@@ -79,7 +74,7 @@ public class AccountServlet extends HttpServlet {
 			dao.transferMoney(request, response);
 			break;
 
-		case "pay":
+		case "payBill":
 			dao.payBills(request, response);
 			break;
 
