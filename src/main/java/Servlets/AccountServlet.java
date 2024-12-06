@@ -2,16 +2,13 @@ package Servlets;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import DAO.BankSystemDAO;
 
 /**
  * Servlet implementation class AccountServlet
@@ -27,186 +24,68 @@ public class AccountServlet extends HttpServlet {
 		super();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
+		BankSystemDAO dao = new BankSystemDAO();
 
 		switch (action) {
 
-		case "create":
-			createAccount(request, response);
-			break;
-
 		case "balance":
-			displayBalance(request, response);
-			break;
-
-		case "deposit":
-			depositMoney(request, response);
-			break;
-
-		case "withdraw":
-			withdrawMoney(request, response);
-			break;
-
-		case "transfer":
-			transferMoney(request, response);
-			break;
-
-		case "pay":
-			payBills(request, response);
+			dao.displayBalance(request, response);
+			break; 
+			
+		case "logout":
+			Cookie[] cookies = request.getCookies(); 
+			if (cookies != null) { 
+				for (Cookie cookie : cookies) { 
+					if ("username".equals(cookie.getName())) { 
+						cookie.setMaxAge(0); // Delete the cookie 
+						response.addCookie(cookie); 
+						} 
+					} 
+				} 
+			response.sendRedirect("login.jsp");	
 			break;
 
 		default:
 			throw new ServletException("Unknown action: " + action);
-
 		}
 	}
 
-	private Connection setupConnection() {
-		Connection con = null;
-
-		// Database Credentials
-		String url = "jdbc:mysql://localhost:3306/BankingSystem"; 
-		String user = "root";
-		String pwd = "12345";
-
-		try {
-			// Load MySQL JDBC Driver
-			Class.forName("com.mysql.cj.jdbc.Driver");
-
-			// Establish Connection
-			con = DriverManager.getConnection(url, user, pwd);
-			System.out.println("Connection Successful");
-
-		} catch (ClassNotFoundException e) {
-			System.err.println("MySQL JDBC Driver not found");
-			e.printStackTrace();
-		} catch (SQLException e) {
-			System.err.println("Failed to establish connection");
-			e.printStackTrace();
-		}
-
-		return con;
-	}
-
-	private void createAccount(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String name = request.getParameter("name");
-		String address = request.getParameter("address");
-		String phoneNumber = request.getParameter("phone_number");
-		String email = request.getParameter("email");
-		String accountType = request.getParameter("account_type");
+		String action = request.getParameter("action");
+		BankSystemDAO dao = new BankSystemDAO();
 
-		Connection connection = null;
-		PreparedStatement clientStatement = null;
-		PreparedStatement accountStatement = null;
+		switch (action) {
+		case "create":
+			dao.createAccount(request, response);
+			break;
 
-		try {
-			connection = setupConnection();
+		case "login":
+			dao.signupAccount(request, response);
+			break;
 
-			if (connection == null) {
-				throw new ServletException("Unable to establish database connection");
-			}
+		case "deposit":
+			dao.depositMoney(request, response);
+			break;
 
-			connection.setAutoCommit(false);
+		case "withdraw":
+			dao.withdrawMoney(request, response);
+			break;
 
-			String clientSQL = "INSERT INTO Clients (name, address, phone_number, email) VALUES (?, ?, ?, ?)";
-			clientStatement = connection.prepareStatement(clientSQL, PreparedStatement.RETURN_GENERATED_KEYS);
-			clientStatement.setString(1, name);
-			clientStatement.setString(2, address);
-			clientStatement.setString(3, phoneNumber);
-			clientStatement.setString(4, email);
-			clientStatement.executeUpdate();
-			System.out.println("Client Added");
-			
-			int clientId = 0;
-			var generatedKeys = clientStatement.getGeneratedKeys();
-			if (generatedKeys.next()) {
-				clientId = generatedKeys.getInt(1);
-			}
+		case "transfer":
+			dao.transferMoney(request, response);
+			break;
 
-			String accountSQL = "INSERT INTO Accounts (client_id, account_type, balance) VALUES (?, ?, ?)";
-			accountStatement = connection.prepareStatement(accountSQL);
-			accountStatement.setInt(1, clientId);
-			accountStatement.setString(2, accountType);
-			accountStatement.setBigDecimal(3, BigDecimal.ZERO);
-			accountStatement.executeUpdate();
-			System.out.println("Account Added");
-			
-			connection.commit();
+		case "pay":
+			dao.payBills(request, response);
+			break;
 
-			request.setAttribute("successMessage", "Account created successfully for " + name); 
-			request.getRequestDispatcher("success.jsp").forward(request, response);
-
-		} catch (SQLException e) {
-			if (connection != null) {
-				try {
-					connection.rollback();
-				} catch (SQLException ex) {
-					ex.printStackTrace();
-				}
-			}
-			request.setAttribute("errorMessage", e.getMessage()); 
-			request.getRequestDispatcher("error.jsp").forward(request, response);
-		} finally {
-			if (clientStatement != null) {
-				try {
-					clientStatement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (accountStatement != null) {
-				try {
-					accountStatement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+		default:
+			throw new ServletException("Unknown action: " + action);
 		}
 	}
 
-	private void displayBalance(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// Implementation for displaying the current balance
-
-	}
-
-	private void depositMoney(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// Implementation for depositing money
-
-	}
-
-	private void withdrawMoney(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// Implementation for withdrawing money
-
-	}
-
-	private void transferMoney(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// Implementation for transferring money
-
-	}
-
-	private void payBills(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// Implementation for paying utility bills
-
-	}
 }

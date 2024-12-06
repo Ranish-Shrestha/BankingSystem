@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Banking System - Home</title>
+<meta charset="UTF-8">
+<title>Banking System - Deposit Money</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -11,8 +12,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
-	<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="index.jsp">Banking System</a>
 			<button class="navbar-toggler" type="button"
@@ -24,13 +24,13 @@
 			<div class="collapse navbar-collapse" id="navbarContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="index.jsp">Home</a>
+						<a class="nav-link" aria-current="page" href="index.jsp">Home</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="balance.jsp">Check Balance</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="deposit.jsp">Deposit Money</a>
+						<a class="nav-link active" href="deposit.jsp">Deposit Money</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="withdraw.jsp">Withdraw Money</a>
@@ -50,27 +50,5 @@
 		</div>
 	</nav>
 
-	<section>
-		<div class="container">
-			<h1>Welcome to Banking System</h1>
-			<%
-				Cookie[] cookies = request.getCookies();
-				String username = null;
-	
-				if (cookies != null) {
-					for (Cookie cookie : cookies) {
-						if ("username".equals(cookie.getName())) {
-							username = cookie.getValue();
-						}
-					}
-				}
-				if (username != null) {
-					out.println("<h2>Hello, " + username + "</h2>");
-				} else {
-					response.sendRedirect("login.jsp");
-				}
-			%>
-		</div>
-	</section>
 </body>
 </html>
