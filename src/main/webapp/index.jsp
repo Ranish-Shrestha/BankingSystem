@@ -100,6 +100,8 @@
     </section>
     
     <script>
+ 		// Call checkBalance on page load or button click 
+ 		document.addEventListener("DOMContentLoaded", getTransactionDetails);
         document.getElementById("username").innerText = getCookie("username");
         document.getElementById("balance").innerText = "$" + getCookie("balance");
         document.getElementById("email").innerText = getCookie("email");

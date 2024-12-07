@@ -38,3 +38,38 @@ CREATE TABLE Payments (
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
 );
 
+INSERT INTO `bankingsystem`.`clients`(`client_id`, `name`, `address`, `phone_number`, `email`, `password`)
+VALUES('1', 'Ranish', '37 King Street', '9876543698', 'ranish@gmail.com', '123456');
+
+INSERT INTO `bankingsystem`.`clients`(`client_id`, `name`, `address`, `phone_number`, `email`, `password`)
+VALUES('2', 'Sumina', '35 Victoria Park Ave', '8529637896', 'sumina@gmail.com', '123456');
+
+INSERT INTO `bankingsystem`.`clients`(`client_id`, `name`, `address`, `phone_number`, `email`, `password`)
+VALUES('3', 'Apple', '78 West View', '8596987412', 'apple@gmail.com', '123456');
+
+INSERT INTO `bankingsystem`.`accounts`(`account_id`, `client_id`, `account_type`, `balance`)
+VALUES ('1', '1', 'savings', '471.00');
+
+INSERT INTO `bankingsystem`.`accounts`(`account_id`, `client_id`, `account_type`, `balance`)
+VALUES ('2', '2', 'checking', '500.00');
+
+INSERT INTO `bankingsystem`.`accounts`(`account_id`, `client_id`, `account_type`, `balance`)
+VALUES ('3', '3', 'savings', '0.00');
+
+INSERT INTO `bankingsystem`.`payments` (`payment_id`, `account_id`, `biller`, `amount`, `payment_date`)
+VALUES ('1', '1', 'Pizza Pizza', '19.00', '2024-12-06 17:10:15');
+
+INSERT INTO `bankingsystem`.`transactions` (`transaction_id`,`account_id`,`transaction_type`,`amount`,`timestamp`,`description`)
+VALUES ('1', '1', 'DEPOSIT', '1000.00', '2024-12-06 17:08:53', 'Deposit into account');
+
+INSERT INTO `bankingsystem`.`transactions` (`transaction_id`,`account_id`,`transaction_type`,`amount`,`timestamp`,`description`)
+VALUES ('2', '1', 'WITHDRAW', '10.00', '2024-12-06 17:09:40', 'Withdrawal from account');
+
+INSERT INTO `bankingsystem`.`transactions` (`transaction_id`,`account_id`,`transaction_type`,`amount`,`timestamp`,`description`)
+VALUES ('3', '1', 'TRANSFER_OUT', '500.00', '2024-12-06 17:09:48', 'Transfer to account 2');
+
+INSERT INTO `bankingsystem`.`transactions` (`transaction_id`,`account_id`,`transaction_type`,`amount`,`timestamp`,`description`)
+VALUES ('4', '2', 'TRANSFER_IN', '500.00', '2024-12-06 17:09:48', 'Transfer from account 1');
+
+INSERT INTO `bankingsystem`.`transactions` (`transaction_id`,`account_id`,`transaction_type`,`amount`,`timestamp`,`description`)
+VALUES ('5', '1', 'PAY_BILL', '19.00', '2024-12-06 17:10:15', 'Payment to Pizza Pizza');
