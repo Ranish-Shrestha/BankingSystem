@@ -6,89 +6,95 @@
 <meta charset="UTF-8">
 <title>Banking System - Deposit Money</title>
 <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
 <script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="index.jsp">Banking System</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarContent"
-				aria-controls="navbarContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item">
-						<a class="nav-link" aria-current="page" href="index.jsp">Home</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link active" href="deposit.jsp">Deposit Money</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="withdraw.jsp">Withdraw Money</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="transfer.jsp">Transfer Money</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="pay.jsp">Pay Bills</a>
-					</li>
-				</ul>
-				<form class="d-flex" action="account">
-					 <input type="hidden" name="action" value="logout">
-					<button class="btn btn-outline-danger" type="submit">Log Out</button>
-				</form>
-			</div>
-		</div>
-	</nav>
-
-    <div class="container">
-        <h1>Deposit Money</h1>
-        <form id="depositForm">
-            <div class="form-group">
-                <label for="account_id">Account ID:</label>
-                <input type="text" id="account_id" name="account_id" placeholder="Account ID" required />
-            </div>
-            <div class="form-group">
-                <label for="amount">Amount:</label>
-                <input type="number" id="amount" name="amount" placeholder="Amount" required />
-            </div>
-            <button type="submit">Deposit</button>
-        </form>
-        <p id="result"></p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.jsp">Banking System</a>
+        <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="index.jsp">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="deposit.jsp">Deposit Money</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="withdraw.jsp">Withdraw Money</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="transfer.jsp">Transfer Money</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="pay.jsp">Pay Bills</a>
+                </li>
+            </ul>
+            <form class="d-flex" action="account">
+                <input type="hidden" name="action" value="logout">
+                <button class="btn btn-outline-danger" type="submit">Log Out</button>
+            </form>
+        </div>
     </div>
+</nav>
 
-    <script>
-        document.getElementById('depositForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+        <div class="details-box mx-auto my-4 p-4 bg-light rounded">
+            <h1 class="text-center">Deposit Money</h1>
+            <form id="depositForm">
+                <div class="form-group mb-3">
+                    <label for="account_id">Account ID:</label>
+                    <input type="text" class="form-control" id="account_id" name="account_id" placeholder="Account ID" required />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="amount">Amount:</label>
+                    <input type="number" class="form-control" id="amount" name="amount" placeholder="Amount" required />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Deposit</button>
+            </form>
+            <p id="result" class="mt-3 text-center"></p>
+        </div>
+    </div>
+    </div>
+</div>
 
-            let formData = new FormData(document.getElementById('depositForm'));
+<script>
+    document.getElementById('depositForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-            try {
-                const response = await fetch("account?action=deposit", {
-                    method: 'POST',
-                    body: new URLSearchParams(formData)
-                });
+        let formData = new FormData(document.getElementById('depositForm'));
 
-                let data = await response.json();
+        try {
+            const response = await fetch("account?action=deposit", {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            });
 
-                if (response.ok) {
-                    document.getElementById('result').innerText = 'Deposit successful';
-                    console.log(data);
-                } else {
-                    document.getElementById('result').innerText = 'Deposit failed: ' + data.error;
-                    console.log(data);
-                }
-            } catch (error) {
-                document.getElementById('result').innerText = 'Error: ' + error.message;
-                console.error('Error:', error);
+            let data = await response.json();
+
+            if (response.ok) {
+                document.getElementById('result').innerText = 'Deposit successful';
+                console.log(data);
+            } else {
+                document.getElementById('result').innerText = 'Deposit failed: ' + data.error;
+                console.log(data);
             }
-        });
-    </script>
+        } catch (error) {
+            document.getElementById('result').innerText = 'Error: ' + error.message;
+            console.error('Error:', error);
+        }
+    });
+</script>
 </body>
 </html>

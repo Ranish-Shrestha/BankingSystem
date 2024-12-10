@@ -8,66 +8,61 @@
     <title>Banking System - Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.jsp">Banking System</a>
-            <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.jsp">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="deposit.jsp">Deposit Money</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="withdraw.jsp">Withdraw Money</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="transfer.jsp">Transfer Money</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="pay.jsp">Pay Bills</a>
-                    </li>
-                </ul>
-                <form class="d-flex" action="account">
-                    <input type="hidden" name="action" value="logout">
-                    <button class="btn btn-outline-danger" type="submit">Log Out</button>
-                </form>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.jsp">Banking System</a>
+                <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="index.jsp">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="deposit.jsp">Deposit Money</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="withdraw.jsp">Withdraw Money</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="transfer.jsp">Transfer Money</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="pay.jsp">Pay Bills</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" action="account">
+                        <input type="hidden" name="action" value="logout">
+                        <button class="btn btn-outline-danger" type="submit">Log Out</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     <section>
         <div class="container">
-            <h1>Welcome to Banking System</h1>
-            <h2>Hello, <span id="username"></span></h2>
-            <dl>
-                <dt>Account Number</dt>
-                <dd><span id="accountNumber"></span></dd>
-                <dt>Account Type</dt>
-                <dd><span id="account_type"></span></dd>
-                <dt>Balance</dt>
-                <dd>
-                    <span id="balance"></span>
-                    <span><button onclick="checkBalance()" class="btn btn-outline-primary">Check Balance</button></span>
-                </dd>
-                <dt>Email</dt>
-                <dd><span id="email"></span></dd>
-            </dl>
-			
-			<button onclick="getTransactionDetails()" class="btn btn-outline-primary">Transaction Details</button>
-            <h3>Transaction History</h3>
+            <div class="details-box mx-auto my-4 p-4 bg-light rounded">
+                <h2 class="text-center">Welcome, <span id="username"></span>!</h2>
+                <p><b>Account ID:</b> <span id="accountNumber"></span></p>
+                <p><b>Account Balance:</b> <span id="balance"></span></p>
+                <p><b>Email: </b> <span id="email"></span></p>
+            </div>
+            
+            <button onclick="checkBalance()" class="btn btn-outline-primary">Check Balance</button>
+            <button onclick="getTransactionDetails()" class="btn btn-outline-primary">Transaction Details</button>
+            <h3 class="mt-4">Transaction History</h3>
             <table class="table table-bordered">
-                <thead>
+                <thead class="table-dark">
                     <tr>
                         <th>Transaction ID</th>
                         <th>Type</th>
@@ -77,7 +72,7 @@
                     </tr>
                 </thead>
                 <tbody id="transactionBody">
-                    
+                    <!-- Add table rows here -->
                 </tbody>
             </table>
 
@@ -98,10 +93,11 @@
             %>
         </div>
     </section>
-    
+
+
     <script>
- 		// Call checkBalance on page load or button click 
- 		document.addEventListener("DOMContentLoaded", getTransactionDetails);
+        // Call checkBalance on page load or button click 
+        document.addEventListener("DOMContentLoaded", getTransactionDetails);
         document.getElementById("username").innerText = getCookie("username");
         document.getElementById("balance").innerText = "$" + getCookie("balance");
         document.getElementById("email").innerText = getCookie("email");
@@ -123,7 +119,6 @@
         async function checkBalance(){
             let account_id = getCookie("accountId");
             
-            
             try { 
                 const response = await fetch("account?action=checkBalance&account_id="+ encodeURIComponent(account_id), { 
                     method: 'GET'
@@ -143,7 +138,6 @@
                 console.error('Error:', error); 
             }
         }
-        
 
         let thtml = "<tr> <td colspan='5'>No transactions found.</td></tr>";
         document.getElementById("transactionBody").innerHTML = thtml;
@@ -160,18 +154,18 @@
                 let dataHTML = "";
                 console.log(data)
                 if (response.ok) { 
-                	data.forEach((item) => {
-             			dataHTML += 
-                     		"<tr>" +
-                     			"<td>" + item.transactionId + "</td>" +
-                     			"<td>" + item.transactionType + "</td>" +
-                     			"<td>" + parseFloat(item.amount).toFixed(2) + "</td>" +
-                     			"<td>" + item.timestamp + "</td>" +
-                     			"<td>" + item.description + "</td>" +
-                     		"</tr>";
-                	})
-                	 
-                	 document.getElementById("transactionBody").innerHTML = dataHTML;
+                    data.forEach((item) => {
+                        dataHTML += 
+                            "<tr>" +
+                                "<td>" + item.transactionId + "</td>" +
+                                "<td>" + item.transactionType + "</td>" +
+                                "<td>" + parseFloat(item.amount).toFixed(2) + "</td>" +
+                                "<td>" + item.timestamp + "</td>" +
+                                "<td>" + item.description + "</td>" +
+                            "</tr>";
+                    })
+                     
+                     document.getElementById("transactionBody").innerHTML = dataHTML;
                 } else { 
                     console.log(data); 
                 } 
