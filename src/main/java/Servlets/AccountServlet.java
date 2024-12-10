@@ -27,7 +27,7 @@ public class AccountServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
 		BankSystemDAO dao = new BankSystemDAO();
-
+		
 		switch (action) {
 			
 		case "logout":
